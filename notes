@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Create files if not exists
+mkdir -p ~/.config
+mkdir -p ~/.config/crabnotes
+touch ~/.config/crabnotes/notes.md
+
+case "$1" in
+    "")
+        echo Searching notes
+        exit 0;;
+    "edit")
+        echo Editing notes file.
+        exit 0;;
+    *)
+        echo "Unknown command."
+        exit 1;;
+esac
