@@ -6,12 +6,21 @@ mkdir -p ~/.config/crabnotes
 touch ~/.config/crabnotes/notes.md
 
 case "$1" in
+    # Search notes
     "")
-        echo Searching notes
+        LINE=$(grep ^# ~/.config/crabnotes/notes.md | fzf)
+        cat ~/.config/crabnotes/notes.md | sed -n "/${LINE}/,/^#/p" | sed '$d' | bat -l bash
         exit 0;;
+    # Edit notes
     "edit")
         echo Editing notes file.
+        $EDITOR ~/.config/crabnotes/notes.md
         exit 0;;
+    # Wrong command
+    "add")
+        echo Did you mean 'notes edit'?
+        exit 1;;
+    # Unknown command
     *)
         echo "Unknown command."
         exit 1;;
