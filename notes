@@ -1,27 +1,44 @@
 #!/bin/bash
 
+NOTEFILE="$HOME/.config/crabnotes/notes.md"
 # Create files if not exists
 mkdir -p ~/.config
 mkdir -p ~/.config/crabnotes
-touch ~/.config/crabnotes/notes.md
+touch ${NOTEFILE}
 
 case "$1" in
     # Search notes
     "")
-        LINE=$(grep ^# ~/.config/crabnotes/notes.md | fzf)
-        cat ~/.config/crabnotes/notes.md | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba' | bat -l md
-        exit 0;;
+        if [ -s ${NOTEFILE} ]
+        then
+            LINE=$(grep ^# ${NOTEFILE} | fzf)
+            if ! [ -z "$LINE" ]
+            then
+                NOTE=$(cat ${NOTEFILE} | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba')
+                echo "${NOTE}" | bat -l md --highlight-line 1 --style snip
+                exit 0
+            else
+                echo "No notes found for that query."
+                exit 1
+            fi
+        else
+            echo "Notes file is empty. (Edit with \"notes edit\")"
+        fi
+    ;;
     # Edit notes
     "edit")
-        echo Editing notes file.
-        $EDITOR ~/.config/crabnotes/notes.md
-        exit 0;;
+        echo "Editing notes file."
+        $EDITOR ${NOTEFILE}
+        exit 0
+    ;;
     # Wrong command
     "add")
-        echo Did you mean 'notes edit'?
-        exit 1;;
+        echo "Did you mean \"notes edit\"?"
+        exit 1
+    ;;
     # Unknown command
     *)
         echo "Unknown command."
-        exit 1;;
+        exit 1
+    ;;
 esac
