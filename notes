@@ -9,7 +9,7 @@ case "$1" in
     # Search notes
     "")
         LINE=$(grep ^# ~/.config/crabnotes/notes.md | fzf)
-        cat ~/.config/crabnotes/notes.md | sed -n "/${LINE}/,/^#/p" | sed '$d' | bat -l bash
+        cat ~/.config/crabnotes/notes.md | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba' | bat -l md
         exit 0;;
     # Edit notes
     "edit")
