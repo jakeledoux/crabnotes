@@ -16,7 +16,12 @@ case "$1" in
             if ! [ -z "$LINE" ]
             then
                 NOTE=$(cat ${NOTEPATH}/* | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba')
-                echo "${NOTE}" | bat -l md --highlight-line 1 --style snip
+                if command -v bat &> /dev/null
+                then
+                    echo "${NOTE}" | bat -l md --highlight-line 1 --style snip
+                else
+                    echo "${NOTE}" | \cat -s
+                fi
                 exit 0
             else
                 echo "No notes found for that query."
