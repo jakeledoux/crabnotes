@@ -22,7 +22,7 @@ case "$1" in
                 exit 1
             fi
         else
-            echo "Notes file is empty. (Edit with \"notes edit\")"
+            echo "Notes file is empty. (Edit with \"cnotes edit\")"
         fi
     ;;
     # Edit notes
@@ -33,7 +33,7 @@ case "$1" in
     ;;
     # Wrong command
     "add")
-        echo "Did you mean \"notes edit\"?"
+        echo "Did you mean \"cnotes edit\"?"
         exit 1
     ;;
     # Unknown command
