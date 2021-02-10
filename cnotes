@@ -1,6 +1,7 @@
 #!/bin/bash
 
-NOTEFILE="$HOME/.config/crabnotes/notes.md"
+NOTEPATH="$HOME/.config/crabnotes"
+NOTEFILE="$NOTEPATH/notes.md"
 # Create files if not exists
 mkdir -p ~/.config
 mkdir -p ~/.config/crabnotes
@@ -11,10 +12,10 @@ case "$1" in
     "")
         if [ -s ${NOTEFILE} ]
         then
-            LINE=$(grep ^# ${NOTEFILE} | fzf)
+            LINE=$(grep -hr ^# ${NOTEPATH} | fzf)
             if ! [ -z "$LINE" ]
             then
-                NOTE=$(cat ${NOTEFILE} | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba')
+                NOTE=$(cat ${NOTEPATH}/* | sed -n "/${LINE}/,/^#/p" | sed "\${/# /d;}" | sed -e :a -e '/./,$!d;/^\n*$/{$d;N;};/\n$/ba')
                 echo "${NOTE}" | bat -l md --highlight-line 1 --style snip
                 exit 0
             else
